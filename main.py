@@ -37,8 +37,12 @@ class Vk_Request:
                   'rev': 1,
                   'count': 100
                   }
-        photo_info = requests.get(url, params={**self.start_params, **params}).json()['response']
-        return photo_info['count'], photo_info['items']
+        if requests.get(url, params={**self.start_params, **params}).status_code == 200:
+            photo_info = requests.get(url, params={**self.start_params, **params}).json()['response']
+            return photo_info['count'], photo_info['items']
+        else:
+            print('Ошибка доступа к ВК')
+            exit()
 
     def _get_dict_photo(self):
         photo_count, photo_items = self._get_photo_info()
